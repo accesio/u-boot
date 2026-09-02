@@ -239,6 +239,8 @@ void board_init_f(ulong dummy)
 	if (rst_src == COLD_BOOT || rst_src & (SW_POR_MCU | SW_POR_MAIN)) {
 		printf("Resetting on cold boot to workaround ErrataID:i2331\n");
 		printf("Please resend tiboot3.bin in case of UART/DFU boot\n");
+		/* Clear the latched reset cause before issuing the warm reset. */
+		writel(0xFFFFFFFF, CTRLMMR_MCU_RST_SRC);
 		do_reset(NULL, 0, 0, NULL);
 	}
 #endif
